@@ -1,0 +1,17 @@
+﻿@using Roombait.Models
+@model Roombait.ViewModels.Residence.IndexViewModel
+@{
+    ViewData["Title"] = "Your Residences";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
+<div>
+    <hr />
+    <ul>
+        @foreach (Residence residence in Model.Residences)
+        {
+            <li><a href="@Url.Action("View", new {id = residence.ResidenceID})">@residence.Name</a></li>
+        }
+    </ul>
+</div>
