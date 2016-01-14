@@ -41,8 +41,6 @@ namespace Roombait
             // Add framework services.
             services.AddEntityFramework()
                 .AddNpgsql()
-                .AddDbContext<ResidenceContext>(options =>
-                    options.UseNpgsql(Configuration["Data:DefaultConnection:ConnectionString"]))
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseNpgsql(Configuration["Data:DefaultConnection:ConnectionString"]));
 

@@ -8,8 +8,8 @@ using Roombait.Models;
 namespace Roombait.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160113083002_IdentityMigration")]
-    partial class IdentityMigration
+    [Migration("20160114214001_ResidenceAndIdentity")]
+    partial class ResidenceAndIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -144,6 +144,16 @@ namespace Roombait.Migrations
                         .HasAnnotation("Relational:Name", "UserNameIndex");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
+                });
+
+            modelBuilder.Entity("Roombait.Models.Residence", b =>
+                {
+                    b.Property<int>("ResidenceID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ResidenceID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>

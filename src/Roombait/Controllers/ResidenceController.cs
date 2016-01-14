@@ -11,9 +11,9 @@ namespace Roombait.Controllers
 {
     public class ResidenceController : Controller
     {
-        private ResidenceContext _context;
+        private ApplicationDbContext _context;
 
-        public ResidenceController(ResidenceContext context)
+        public ResidenceController(ApplicationDbContext context)
         {
             _context = context;
         }

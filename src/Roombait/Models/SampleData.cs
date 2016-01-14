@@ -2,7 +2,9 @@
 using Microsoft.Framework.DependencyInjection;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity.Storage;
+using Microsoft.Extensions.OptionsModel;
 
 namespace Roombait.Models
 {
@@ -10,9 +12,11 @@ namespace Roombait.Models
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            var context = serviceProvider.GetService<ResidenceContext>();
+            var context = serviceProvider.GetService<ApplicationDbContext>();
 
-            if (context != null && !context.Residences.Any())
+            if (context == null) { return; }
+
+            if (!context.Residences.Any())
             {
                 context.Residences.AddRange
                 (
@@ -29,6 +33,15 @@ namespace Roombait.Models
                         Name = "Crapland"
                     }
                 );
+            }
+
+            if (!context.Users.Any())
+            {
+
+                var user = new ApplicationUser { UserName = "jmazouri@gmail.com", Email = "jmazouri@gmail.com" };
+                
+
+                context.Users.Add(user);
 
                 context.SaveChanges();
             }

@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Roombait.Migrations
 {
-    public partial class IdentityMigration : Migration
+    public partial class ResidenceAndIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,18 @@ namespace Roombait.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                });
+            migrationBuilder.CreateTable(
+                name: "Residence",
+                columns: table => new
+                {
+                    ResidenceID = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:Serial", true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Residence", x => x.ResidenceID);
                 });
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
@@ -147,6 +159,7 @@ namespace Roombait.Migrations
             migrationBuilder.DropTable("AspNetUserClaims");
             migrationBuilder.DropTable("AspNetUserLogins");
             migrationBuilder.DropTable("AspNetUserRoles");
+            migrationBuilder.DropTable("Residence");
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
         }

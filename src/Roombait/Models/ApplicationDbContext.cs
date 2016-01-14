@@ -10,6 +10,8 @@ namespace Roombait.Models
 {
     public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Residence> Residences { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
