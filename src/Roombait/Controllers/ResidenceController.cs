@@ -21,7 +21,7 @@ namespace Roombait.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View(new ViewModels.Residence.IndexViewModel
+            return View(new ViewModels.Residence.ResidenceIndexViewModel
             {
                 Residences = _context.Residences.ToList()
             });
@@ -39,14 +39,14 @@ namespace Roombait.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Residence residence)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Residences.Add(residence);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+                return View(residence);
             }
 
-            return View(residence);
+            _context.Residences.Add(residence);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
     }

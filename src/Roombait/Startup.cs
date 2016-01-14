@@ -97,8 +97,12 @@ namespace Roombait
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "viewShortcut",
+                    template: "{controller}/{id:int}/{slug?}",
+                    defaults: new { action = "View" });
+                routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}/{slug?}");
             });
 
             SampleData.Initialize(app.ApplicationServices);

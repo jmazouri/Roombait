@@ -1,5 +1,5 @@
-﻿@using Roombait.Models
-@model Roombait.ViewModels.Residence.IndexViewModel
+﻿@using Roombait.App
+@model Roombait.ViewModels.Residence.ResidenceIndexViewModel
 @{
     ViewData["Title"] = "Your Residences";
 }
@@ -11,7 +11,12 @@
     <ul>
         @foreach (Residence residence in Model.Residences)
         {
-            <li><a href="@Url.Action("View", new {id = residence.ResidenceID})">@residence.Name</a></li>
+            <h2>
+                <li>
+
+                    <a href="Residence/@residence.ResidenceID/@Util.GetSlug(residence)">@residence.Name</a>
+                </li>
+            </h2>
         }
     </ul>
 </div>
