@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -9,6 +7,8 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Npgsql;
+using Roombait.App;
 using Roombait.Models;
 using Roombait.Services;
 
@@ -103,7 +103,10 @@ namespace Roombait
                     template: "{controller=Home}/{action=Index}/{id?}/{slug?}");
             });
 
-            SampleData.Initialize(app.ApplicationServices);
+            new Task(delegate
+            {
+                SampleData.Initialize(app.ApplicationServices);
+            }).RunSynchronously();
         }
 
         // Entry point for the application.

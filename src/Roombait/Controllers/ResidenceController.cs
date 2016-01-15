@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Diagnostics;
+using Microsoft.AspNet.Http.Features;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Roombait.Models;
@@ -11,7 +12,7 @@ namespace Roombait.Controllers
 {
     public class ResidenceController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public ResidenceController(ApplicationDbContext context)
         {
@@ -23,14 +24,18 @@ namespace Roombait.Controllers
         {
             return View(new ViewModels.Residence.ResidenceIndexViewModel
             {
-                Residences = _context.Residences.ToList()
+                Residences = _context.Residences
+                .Where(residence => residence.Residents.Any(user => user.Id == HttpContext.User.GetUserId()))
+                .ToList()
             });
         }
 
         [Authorize]
         public async Task<IActionResult> View(int id)
         {
-            var result = await _context.Residences.SingleOrDefaultAsync(d => d.ResidenceID == id);
+            var result = await _context.Residences
+                .Include(d=>d.Residents).SingleOrDefaultAsync(d => d.ResidenceID == id);
+
             return View(result);
         }
 

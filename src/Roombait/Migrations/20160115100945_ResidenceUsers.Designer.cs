@@ -8,8 +8,8 @@ using Roombait.Models;
 namespace Roombait.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160114214001_ResidenceAndIdentity")]
-    partial class ResidenceAndIdentity
+    [Migration("20160115100945_ResidenceUsers")]
+    partial class ResidenceUsers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,6 +98,36 @@ namespace Roombait.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("Roombait.Models.Activity", b =>
+                {
+                    b.Property<int>("ActivityID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("AssociatedResidenceResidenceID");
+
+                    b.Property<string>("DaysPerformed");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ActivityID");
+                });
+
+            modelBuilder.Entity("Roombait.Models.ActivityPerformance", b =>
+                {
+                    b.Property<int>("PerformanceID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Memo");
+
+                    b.Property<int?>("PerformedActivityActivityID");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<DateTime>("WhenPerformed");
+
+                    b.HasKey("PerformanceID");
+                });
+
             modelBuilder.Entity("Roombait.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
@@ -111,6 +141,8 @@ namespace Roombait.Migrations
                         .HasAnnotation("MaxLength", 256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FullName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -127,6 +159,8 @@ namespace Roombait.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<int?>("ResidenceResidenceID");
 
                     b.Property<string>("SecurityStamp");
 
@@ -186,6 +220,31 @@ namespace Roombait.Migrations
                     b.HasOne("Roombait.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Roombait.Models.Activity", b =>
+                {
+                    b.HasOne("Roombait.Models.Residence")
+                        .WithMany()
+                        .HasForeignKey("AssociatedResidenceResidenceID");
+                });
+
+            modelBuilder.Entity("Roombait.Models.ActivityPerformance", b =>
+                {
+                    b.HasOne("Roombait.Models.Activity")
+                        .WithMany()
+                        .HasForeignKey("PerformedActivityActivityID");
+
+                    b.HasOne("Roombait.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Roombait.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Roombait.Models.Residence")
+                        .WithMany()
+                        .HasForeignKey("ResidenceResidenceID");
                 });
         }
     }

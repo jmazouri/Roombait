@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Roombait.Migrations
 {
-    public partial class ResidenceAndIdentity : Migration
+    public partial class ResidenceUsers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,30 +20,6 @@ namespace Roombait.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityRole", x => x.Id);
-                });
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
                 });
             migrationBuilder.CreateTable(
                 name: "Residence",
@@ -76,6 +52,58 @@ namespace Roombait.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+            migrationBuilder.CreateTable(
+                name: "Activity",
+                columns: table => new
+                {
+                    ActivityID = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:Serial", true),
+                    AssociatedResidenceResidenceID = table.Column<int>(nullable: true),
+                    DaysPerformed = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activity", x => x.ActivityID);
+                    table.ForeignKey(
+                        name: "FK_Activity_Residence_AssociatedResidenceResidenceID",
+                        column: x => x.AssociatedResidenceResidenceID,
+                        principalTable: "Residence",
+                        principalColumn: "ResidenceID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    FullName = table.Column<string>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    ResidenceResidenceID = table.Column<int>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    UserName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUser_Residence_ResidenceResidenceID",
+                        column: x => x.ResidenceResidenceID,
+                        principalTable: "Residence",
+                        principalColumn: "ResidenceID",
+                        onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
@@ -139,6 +167,33 @@ namespace Roombait.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.CreateTable(
+                name: "ActivityPerformance",
+                columns: table => new
+                {
+                    PerformanceID = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:Serial", true),
+                    Memo = table.Column<string>(nullable: true),
+                    PerformedActivityActivityID = table.Column<int>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    WhenPerformed = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityPerformance", x => x.PerformanceID);
+                    table.ForeignKey(
+                        name: "FK_ActivityPerformance_Activity_PerformedActivityActivityID",
+                        column: x => x.PerformedActivityActivityID,
+                        principalTable: "Activity",
+                        principalColumn: "ActivityID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ActivityPerformance_ApplicationUser_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
@@ -159,9 +214,11 @@ namespace Roombait.Migrations
             migrationBuilder.DropTable("AspNetUserClaims");
             migrationBuilder.DropTable("AspNetUserLogins");
             migrationBuilder.DropTable("AspNetUserRoles");
-            migrationBuilder.DropTable("Residence");
+            migrationBuilder.DropTable("ActivityPerformance");
             migrationBuilder.DropTable("AspNetRoles");
+            migrationBuilder.DropTable("Activity");
             migrationBuilder.DropTable("AspNetUsers");
+            migrationBuilder.DropTable("Residence");
         }
     }
 }

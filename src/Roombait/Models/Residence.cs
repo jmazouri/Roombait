@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Roombait.Models
 {
@@ -9,5 +6,7 @@ namespace Roombait.Models
     {
         public int ResidenceID { get; set; }
         public string Name { get; set; }
+
+        public List<ApplicationUser> Residents { get; set; } 
     }
 }
