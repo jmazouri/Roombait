@@ -13,8 +13,12 @@
         {
             <h2>
                 <li>
-
                     <a href="Residence/@residence.ResidenceID/@Util.GetSlug(residence)">@residence.Name</a>
+                    <br/>
+                    @foreach (ApplicationUser resident in residence.Residents)
+                    {
+                        <span class="label big label-primary">@resident.Name</span>
+                    }
                 </li>
             </h2>
         }

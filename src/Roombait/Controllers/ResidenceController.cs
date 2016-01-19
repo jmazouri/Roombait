@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
@@ -22,11 +23,24 @@ namespace Roombait.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            List<Residence> result = null;
+
+            if (User.HasClaim("Admin", "true"))
+            {
+                result = _context.Residences
+                    .Include(d=>d.Residents).ToList();
+            }
+            else
+            {
+                result = _context.Residences
+                        .Where(residence => residence.Residents.Any(user => user.Id == HttpContext.User.GetUserId()))
+                        .Include(d => d.Residents)
+                        .ToList();
+            }
+
             return View(new ViewModels.Residence.ResidenceIndexViewModel
             {
-                Residences = _context.Residences
-                .Where(residence => residence.Residents.Any(user => user.Id == HttpContext.User.GetUserId()))
-                .ToList()
+                Residences = result
             });
         }
 
@@ -49,8 +63,10 @@ namespace Roombait.Controllers
                 return View(residence);
             }
 
+            residence.Owner = _context.Users.First(d=>d.Id == User.GetUserId());
             _context.Residences.Add(residence);
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

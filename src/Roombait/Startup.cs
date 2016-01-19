@@ -103,10 +103,13 @@ namespace Roombait
                     template: "{controller=Home}/{action=Index}/{id?}/{slug?}");
             });
 
-            new Task(delegate
+            if (env.IsDevelopment())
             {
-                SampleData.Initialize(app.ApplicationServices);
-            }).RunSynchronously();
+                new Task(delegate
+                {
+                    SampleData.Initialize(app.ApplicationServices);
+                }).RunSynchronously();
+            }
         }
 
         // Entry point for the application.

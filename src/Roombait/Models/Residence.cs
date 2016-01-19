@@ -8,5 +8,6 @@ namespace Roombait.Models
         public string Name { get; set; }
 
         public List<ApplicationUser> Residents { get; set; } 
+        public ApplicationUser Owner { get; set; }
     }
 }
