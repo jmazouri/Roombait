@@ -1,32 +1,51 @@
-﻿@using Roombait.App
+﻿@using System.Security.Claims
+@using Roombait.App
 @model Roombait.ViewModels.Residence.ResidenceIndexViewModel
 @{
     ViewData["Title"] = "Your Residences";
 }
 
+<br/>
+
+<div class="btn-group pull-right">
+    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        New Residence <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <div class="newresidence input-group">
+                <input asp-for="NewResidenceName" class="form-control" placeholder="Residence Name"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default residencecreate" type="button">Create</button>
+                </span>
+            </div>
+        </li>
+    </ul>
+</div>
+
 <h2>@ViewData["Title"]</h2>
+
 <p class="text-success">@ViewData["StatusMessage"]</p>
 <div>
-    <hr />
-    <ul class="residencelist">
+    <div class="list-group">
         @foreach (Residence residence in Model.Residences)
         {
-            <li>
-                <a href="Residence/@residence.ResidenceID/@Util.GetSlug(residence)">@residence.Name</a>
+            <a href="Residence/@residence.ResidenceID/@Util.GetSlug(residence.Name)" class="list-group-item">
+                <h4 class="list-group-item-heading">@residence.Name</h4>
 
                 @if (residence.Residents != null && residence.Residents.Count > 0)
                 {
-                    <br />
-                    <ul>
-                        @foreach (ApplicationUser resident in residence.Residents)
-                        {
-                            <li>
-                                <span class="label big label-primary">@resident.Name</span>
-                            </li>
-                        }
-                    </ul>
+                     @foreach (ApplicationUser resident in residence.Residents)
+                     {
+                         <span class="label big @(resident.Id == User.GetUserId() ? "label-success" : "label-primary")">@resident.Name</span>
+                     }
                 }
-            </li>
+                else
+                {
+                    <span>No residents</span>
+                }
+            </a>
         }
-    </ul>
+    </div>
+
 </div>

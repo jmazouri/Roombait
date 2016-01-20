@@ -15,6 +15,7 @@ namespace Roombait.Models
 
         public Residence()
         {
+            Residents = new List<ApplicationUser>();
             Activites = new List<Activity>();
         }
     }

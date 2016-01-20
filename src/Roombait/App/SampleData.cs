@@ -11,6 +11,19 @@ namespace Roombait.App
 {
     public static class SampleData
     {
+        static List<DayOfWeek> RandomDays(Random rand)
+        {
+            var ret = new List<DayOfWeek>();
+            var options = Enum.GetValues(typeof (DayOfWeek)).Cast<DayOfWeek>();
+
+            for (int i = 0; i <= rand.Next(1, options.Count()); i++)
+            {
+                ret.Add(options.ElementAt(rand.Next(options.Count())));
+            }
+
+            return ret;
+        }
+
         public static async void Initialize(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetService<ApplicationDbContext>();
@@ -47,7 +60,7 @@ namespace Roombait.App
                 string[] types = {"Apartment", "Room", "Condo", "House", "Dorm"};
 
                 int maxUsers = context.Users.Count();
-                int curCount = 1;
+                int curCount = 0;
 
                 while (curCount < maxUsers)
                 {
@@ -71,34 +84,42 @@ namespace Roombait.App
 
             if (!context.Performances.Any())
             {
-                context.Performances.AddRange
-                (
-                    new ActivityPerformance
-                    {
-                        Memo = "Sample Data Memo",
-                        User = context.Users.First(),
-                        WhenPerformed = DateTime.Today.AddDays(-2)
-                    }
-                );
+                for (int i = 0; i <= 10; i++)
+                {
+                    context.Performances.Add
+                    (
+                        new ActivityPerformance
+                        {
+                            Memo = "Sample Data Memo",
+                            User = context.Users.First(),
+                            WhenPerformed = DateTime.Today.AddDays(-rand.Next(1, 10))
+                        }
+                    );
+                }
 
                 context.SaveChanges();
             }
 
             if (!context.Activities.Any())
             {
-                context.Activities.AddRange
-                (
-                    new Activity
-                    {
-                        Name = "Dishes",
-                        AssociatedResidence = context.Residences.First(),
-                        DaysPerformedList = new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Wednesday },
-                        Performances = new List<ActivityPerformance>()
+                string[] types = { "Dishes", "Mop Common Area", "Take out Trash", "Wipe Down Kitchen", "Scrub Toilet", "Cleaning" };
+
+                for (int i = 0; i <= 10; i++)
+                {
+                    context.Activities.Add
+                    (
+                        new Activity
                         {
-                            context.Performances.First()
+                            Name = types[rand.Next(types.Length)],
+                            AssociatedResidence = context.Residences.Skip(rand.Next(context.Residences.Count())).Take(1).First(),
+                            DaysPerformedList = RandomDays(rand),
+                            Performances = new List<ActivityPerformance>
+                            {
+                                context.Performances.Skip(i).Take(1).First()
+                            }
                         }
-                    }
-                );
+                    );
+                }
 
                 context.SaveChanges();
             }
@@ -106,3 +127,4 @@ namespace Roombait.App
         }
     }
 }
+

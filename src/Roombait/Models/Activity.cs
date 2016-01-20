@@ -41,6 +41,12 @@ namespace Roombait.Models
             set { DaysPerformed = String.Join(",", value); }
         }
 
+        public Activity()
+        {
+            DaysPerformed = "";
+            Performances = new List<ActivityPerformance>();
+        }
+
         public Dictionary<DayOfWeek, ActivityState> PerformanceStatus()
         {
             Dictionary<DayOfWeek, ActivityState> ret = new Dictionary<DayOfWeek, ActivityState>();
@@ -49,9 +55,9 @@ namespace Roombait.Models
             {
                 ActivityState state = ActivityState.NotScheduled;
 
-                var thisWeek = Performances.Where(d => d.IsInWeek(Util.StartOfWeek(DateTime.Now), Util.EndOfWeek(DateTime.Now)));
+                var performancesThisWeek = Performances.Where(d => d.IsInWeek(Util.StartOfWeek(DateTime.Now), Util.EndOfWeek(DateTime.Now)));
 
-                if (thisWeek.Any(d =>d.WhenPerformed.DayOfWeek == day))
+                if (performancesThisWeek.Any(d =>d.WhenPerformed.DayOfWeek == day))
                 {
                     state = ActivityState.Completed;
                 }
@@ -59,8 +65,7 @@ namespace Roombait.Models
                 {
                     if (DaysPerformedList.Contains(day))
                     {
-                        state = thisWeek
-                            .Where(d=> DaysPerformedList.Contains(d.WhenPerformed.DayOfWeek))
+                        state = performancesThisWeek
                             .Any(d => d.WhenPerformed.DayOfWeek == day) ? ActivityState.PastDue : ActivityState.Upcoming;
                     }
                 }

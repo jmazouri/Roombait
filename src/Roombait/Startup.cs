@@ -101,6 +101,9 @@ namespace Roombait
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}/{slug?}");
+                routes.MapRoute(
+                    name: "createShortcut",
+                    template: "{controller}/Create");
             });
 
             if (env.IsDevelopment())

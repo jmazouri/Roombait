@@ -63,14 +63,18 @@ namespace Roombait.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(residence);
+                return HttpBadRequest();
             }
 
-            residence.Owner = _context.Users.First(d=>d.Id == User.GetUserId());
+            var currentUser = _context.Users.First(d => d.Id == User.GetUserId());
+
+            residence.Owner = currentUser;
+            residence.Residents.Add(currentUser);
+
             _context.Residences.Add(residence);
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return new HttpOkResult();
         }
 
     }

@@ -1,0 +1,26 @@
+﻿@model Roombait.Models.Activity
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+
+<p class="text-success">@ViewData["StatusMessage"]</p>
+<h2 class="residencename">"@ViewData["Title"]" History for <a href="/Residence/View/@Model.AssociatedResidence.ResidenceID">@Model.AssociatedResidence.Name</a></h2>
+<br/>
+<div id="calendar"></div>
+
+@section styles
+{
+    <link type="text/css" rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.min.css" />
+}
+
+@section scripts
+{
+    <script>
+        var activityId = @Model.ActivityID;
+    </script>
+
+    <script src="~/lib/moment/min/moment.min.js"></script>
+    <script src="~/lib/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script src="~/js/activitycalendar.js"></script>
+}

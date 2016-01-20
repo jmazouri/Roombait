@@ -1,41 +1,93 @@
-﻿@model Roombait.Models.Residence
+﻿@using System.Threading.Tasks
+@using Roombait.App
+@model Roombait.Models.Residence
 @{
     ViewData["Title"] = Model.Name;
 }
 
+<br />
+
+<div class="btn-group keepopen pull-right">
+    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        New Activity<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu newactivity">
+        <li>
+            <input class="form-control" id="NewActivityName" name="NewActivityName" type="text" placeholder="Activity Name"/>
+        </li>
+        <li>
+            <div class="btn-group btn-group-xs" data-toggle="buttons">
+                @foreach (string dayofweek in Enum.GetNames(typeof(DayOfWeek)))
+                {
+                    <label class="btn btn-info">
+                        <input type="checkbox" name="chosenDays[]" autocomplete="off" value="@dayofweek"> @dayofweek
+                    </label>
+                }
+            </div>
+        </li>
+        <li>
+            <button class="btn btn-default submitbtn activitycreate" type="button">Create</button>
+            <button class="btn btn-danger submitbtn" type="button">Cancel</button>
+        </li>
+    </ul>
+</div>
+
 <p class="text-success">@ViewData["StatusMessage"]</p>
-<h2 class="residencename">@ViewData["Title"]</h2>
+<h2 class="residencename">@ViewData["Title"] Activities</h2>
 @foreach (ApplicationUser resident in Model.Residents)
 {
     <span class="label label-primary">@resident.Name</span>
 }
-<br/>
-@foreach (Activity activity in Model.Activites)
-{
-    <p class="bg-info activitypanel">
-        
-        <em>@activity.Name</em>
-        @foreach (var dayStatus in activity.PerformanceStatus())
-        {
-            string spanClass = "label-default";
-
-            switch (dayStatus.Value)
+<br/><br/>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Activities</h3>
+    </div>
+    <div class="panel-body">
+        <div class="list-group">
+            @if (Model.Activites == null || Model.Activites.Count == 0)
             {
-                case ActivityState.Completed:
-                    spanClass = "label-success";
-                    break;
-                case ActivityState.NotScheduled:
-                    spanClass = "label-default";
-                    break;
-                case ActivityState.PastDue:
-                    spanClass = "label-danger";
-                    break;
-                case ActivityState.Upcoming:
-                    spanClass = "label-primary";
-                    break;
+                <h3>
+                    <p class="text-center">No Activities</p>
+                </h3>
             }
-            <span title="@(dayStatus.Value.ToString())" class="label @(spanClass)">@dayStatus.Key.ToString()</span>
-        }
+            @foreach (Activity activity in Model.Activites)
+            {
+                <a href="/Activity/@activity.ActivityID/@Util.GetSlug(activity.Name)" class="list-group-item">
+                    <h4 class="list-group-item-heading">@activity.Name</h4>
+                    <p class="list-group-item-text">
+                        @foreach (var dayStatus in activity.PerformanceStatus())
+                        {
+                            string spanClass = "label-default";
 
-    </p>
+                            switch (dayStatus.Value)
+                            {
+                                case ActivityState.Completed:
+                                    spanClass = "label-success";
+                                    break;
+                                case ActivityState.NotScheduled:
+                                    spanClass = "label-default";
+                                    break;
+                                case ActivityState.PastDue:
+                                    spanClass = "label-danger";
+                                    break;
+                                case ActivityState.Upcoming:
+                                    spanClass = "label-primary";
+                                    break;
+                            }
+
+                            <span title="@(dayStatus.Value.ToString())" class="label @(spanClass)">@dayStatus.Key.ToString()</span>
+                        }
+                    </p>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        var residenceId = @Model.ResidenceID;
+    </script>
 }

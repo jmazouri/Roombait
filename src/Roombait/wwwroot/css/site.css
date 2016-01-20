@@ -53,3 +53,19 @@
 {
     padding: 8px;
 }
+
+.newresidence
+{
+    width: 300px;
+    padding: 6px;
+}
+
+.newactivity
+{
+    width: 425px;
+    padding: 6px;
+}
+
+.newactivity li:not(:last-child) {
+    margin-bottom: 8px;
+}

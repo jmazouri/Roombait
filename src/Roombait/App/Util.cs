@@ -4,9 +4,9 @@ namespace Roombait.App
 {
     public static class Util
     {
-        public static string GetSlug(Models.Residence residence)
+        public static string GetSlug(string input)
         {
-            return residence.Name.ToLower().Replace(' ', '-');
+            return input.ToLower().Replace(' ', '-');
         }
 
         public static DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek = DayOfWeek.Sunday)
