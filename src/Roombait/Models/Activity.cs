@@ -57,17 +57,14 @@ namespace Roombait.Models
 
                 var performancesThisWeek = Performances.Where(d => d.IsInWeek(Util.StartOfWeek(DateTime.Now), Util.EndOfWeek(DateTime.Now)));
 
-                if (performancesThisWeek.Any(d =>d.WhenPerformed.DayOfWeek == day))
+                if (DaysPerformedList.Contains(day))
+                {
+                    state = day < DateTime.Now.DayOfWeek ? ActivityState.PastDue : ActivityState.Upcoming;
+                }
+
+                if (performancesThisWeek.Any(d => d.WhenPerformed.DayOfWeek == day))
                 {
                     state = ActivityState.Completed;
-                }
-                else
-                {
-                    if (DaysPerformedList.Contains(day))
-                    {
-                        state = performancesThisWeek
-                            .Any(d => d.WhenPerformed.DayOfWeek == day) ? ActivityState.PastDue : ActivityState.Upcoming;
-                    }
                 }
 
                 ret.Add(day, state);

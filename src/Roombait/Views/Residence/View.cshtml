@@ -1,4 +1,5 @@
-﻿@using System.Threading.Tasks
+﻿@using System.Security.Claims
+@using System.Threading.Tasks
 @using Roombait.App
 @model Roombait.Models.Residence
 @{
@@ -36,7 +37,7 @@
 <h2 class="residencename">@ViewData["Title"] Activities</h2>
 @foreach (ApplicationUser resident in Model.Residents)
 {
-    <span class="label label-primary">@resident.Name</span>
+    <span class="label @(resident.Id == User.GetUserId() ? "label-success" : "label-primary")">@resident.Name</span>
 }
 <br/><br/>
 <div class="panel panel-default">
