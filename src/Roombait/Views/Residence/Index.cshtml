@@ -35,10 +35,16 @@
 
                 @if (residence.Residents != null && residence.Residents.Count > 0)
                 {
-                     @foreach (ApplicationUser resident in residence.Residents)
-                     {
-                         <span class="label big @(resident.Id == User.GetUserId() ? "label-success" : "label-primary")">@resident.Name</span>
-                     }
+                    @foreach (ApplicationUser resident in residence.Residents)
+                    {
+                       <span class="label big residentname @(resident.Id == User.GetUserId() ? "label-success" : "label-primary")">
+                       @resident.Name
+                       @if (resident.Id == residence.Owner.Id)
+                       {
+                           <span class="glyphicon glyphicon-star small" aria-hidden="true" title="Owner of Residence"></span>
+                       }
+                       </span>
+                    }
                 }
                 else
                 {

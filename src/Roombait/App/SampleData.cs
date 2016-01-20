@@ -74,7 +74,8 @@ namespace Roombait.App
                         new Residence
                         {
                             Name = types[rand.Next(types.Length)] + " " + rand.Next(200, 9999),
-                            Residents = users.ToList()
+                            Residents = users.ToList(),
+                            Owner = context.Users.Skip(rand.Next(context.Users.Count())).Take(1).First()
                         }
                     );
                 }

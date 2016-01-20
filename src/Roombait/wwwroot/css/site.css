@@ -69,3 +69,8 @@
 .newactivity li:not(:last-child) {
     margin-bottom: 8px;
 }
+
+.residentname {
+    display: inline-block;
+    margin-right: 0.3em;
+}

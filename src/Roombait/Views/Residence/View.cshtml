@@ -37,54 +37,55 @@
 <h2 class="residencename">@ViewData["Title"] Activities</h2>
 @foreach (ApplicationUser resident in Model.Residents)
 {
-    <span class="label @(resident.Id == User.GetUserId() ? "label-success" : "label-primary")">@resident.Name</span>
+    <span class="label residentname @(resident.Id == User.GetUserId() ? "label-success" : "label-primary")">
+        @resident.Name
+        @if (resident.Id == Model.Owner.Id)
+        {
+            <span class="glyphicon glyphicon-star small" aria-hidden="true" title="Owner of Residence"></span>
+        }
+    </span>
 }
 <br/><br/>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Activities</h3>
-    </div>
-    <div class="panel-body">
-        <div class="list-group">
-            @if (Model.Activites == null || Model.Activites.Count == 0)
+<div class="list-group">
+    @if (Model.Activites == null || Model.Activites.Count == 0)
             {
-                <h3>
-                    <p class="text-center">No Activities</p>
-                </h3>
-            }
-            @foreach (Activity activity in Model.Activites)
+        <h3>
+            <p class="text-center">No Activities</p>
+        </h3>
+    }
+    @foreach (Activity activity in Model.Activites)
             {
-                <a href="/Activity/@activity.ActivityID/@Util.GetSlug(activity.Name)" class="list-group-item">
-                    <h4 class="list-group-item-heading">@activity.Name</h4>
-                    <p class="list-group-item-text">
-                        @foreach (var dayStatus in activity.PerformanceStatus())
-                        {
-                            string spanClass = "label-default";
+        <a href="/Activity/@activity.ActivityID/@Util.GetSlug(activity.Name)" class="list-group-item">
+            <h4 class="list-group-item-heading">@activity.Name</h4>
+            <p class="list-group-item-text">
+                @foreach (var dayStatus in activity.PerformanceStatus())
+                {
+                    string spanClass = "label-default";
 
-                            switch (dayStatus.Value)
-                            {
-                                case ActivityState.Completed:
-                                    spanClass = "label-success";
-                                    break;
-                                case ActivityState.NotScheduled:
-                                    spanClass = "label-default";
-                                    break;
-                                case ActivityState.PastDue:
-                                    spanClass = "label-danger";
-                                    break;
-                                case ActivityState.Upcoming:
-                                    spanClass = "label-primary";
-                                    break;
-                            }
+                    switch (dayStatus.Value)
+                    {
+                        case ActivityState.Completed:
+                            spanClass = "label-success";
+                            break;
+                        case ActivityState.NotScheduled:
+                            spanClass = "label-default";
+                            break;
+                        case ActivityState.PastDue:
+                            spanClass = "label-danger";
+                            break;
+                        case ActivityState.Upcoming:
+                            spanClass = "label-primary";
+                            break;
+                    }
 
-                            <span title="@(dayStatus.Value.ToString())" class="label @(spanClass)">@dayStatus.Key.ToString()</span>
-                        }
-                    </p>
-                </a>
-            }
-        </div>
-    </div>
+                    <span title="@(dayStatus.Value.ToString())" class="label @(spanClass)">@dayStatus.Key.ToString()</span>
+                }
+            </p>
+        </a>
+    }
 </div>
+
+
 
 @section scripts
 {
