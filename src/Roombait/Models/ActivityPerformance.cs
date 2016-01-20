@@ -12,8 +12,12 @@ namespace Roombait.Models
         public int PerformanceID { get; set; }
 
         public ApplicationUser User { get; set; }
-        public Activity PerformedActivity { get; set; }
         public DateTime WhenPerformed { get; set; }
         public string Memo { get; set; }
+
+        public bool IsInWeek(DateTime start, DateTime end)
+        {
+            return WhenPerformed >= start && WhenPerformed <= end;
+        }
     }
 }

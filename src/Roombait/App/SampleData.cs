@@ -69,6 +69,21 @@ namespace Roombait.App
                 context.SaveChanges();
             }
 
+            if (!context.Performances.Any())
+            {
+                context.Performances.AddRange
+                (
+                    new ActivityPerformance
+                    {
+                        Memo = "Sample Data Memo",
+                        User = context.Users.First(),
+                        WhenPerformed = DateTime.Today.AddDays(-2)
+                    }
+                );
+
+                context.SaveChanges();
+            }
+
             if (!context.Activities.Any())
             {
                 context.Activities.AddRange
@@ -77,23 +92,11 @@ namespace Roombait.App
                     {
                         Name = "Dishes",
                         AssociatedResidence = context.Residences.First(),
-                        DaysPerformedList = new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Wednesday }
-                    }
-                );
-
-                context.SaveChanges();
-            }
-
-            if (!context.Performances.Any())
-            {
-                context.Performances.AddRange
-                (
-                    new ActivityPerformance
-                    {
-                        Memo = "Sample Data Memo",
-                        PerformedActivity = context.Activities.First(),
-                        User = context.Users.First(),
-                        WhenPerformed = DateTime.Today.AddDays(-2)
+                        DaysPerformedList = new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Wednesday },
+                        Performances = new List<ActivityPerformance>()
+                        {
+                            context.Performances.First()
+                        }
                     }
                 );
 

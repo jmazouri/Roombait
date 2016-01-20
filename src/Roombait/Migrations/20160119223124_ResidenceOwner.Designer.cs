@@ -8,9 +8,10 @@ using Roombait.Models;
 namespace Roombait.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160119223124_ResidenceOwner")]
+    partial class ResidenceOwner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
@@ -116,9 +117,9 @@ namespace Roombait.Migrations
                     b.Property<int>("PerformanceID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ActivityActivityID");
-
                     b.Property<string>("Memo");
+
+                    b.Property<int?>("PerformedActivityActivityID");
 
                     b.Property<string>("UserId");
 
@@ -234,7 +235,7 @@ namespace Roombait.Migrations
                 {
                     b.HasOne("Roombait.Models.Activity")
                         .WithMany()
-                        .HasForeignKey("ActivityActivityID");
+                        .HasForeignKey("PerformedActivityActivityID");
 
                     b.HasOne("Roombait.Models.ApplicationUser")
                         .WithMany()

@@ -48,7 +48,10 @@ namespace Roombait.Controllers
         public async Task<IActionResult> View(int id)
         {
             var result = await _context.Residences
-                .Include(d=>d.Residents).SingleOrDefaultAsync(d => d.ResidenceID == id);
+                .Include(d=>d.Residents)
+                .Include(d=>d.Activites)
+                .ThenInclude(d=>d.Performances)
+                .SingleOrDefaultAsync(d => d.ResidenceID == id);
 
             return View(result);
         }

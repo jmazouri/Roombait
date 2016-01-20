@@ -12,6 +12,44 @@
 
 .label.big
 {
-    display: inline-block;
     font-size: 14px;
+    margin: 0;
+}
+
+.residencelist
+{
+    font-size: 2em;
+}
+
+.residencelist li ul
+{
+    list-style-type: none;
+    line-height: 1;
+
+    margin-bottom: 0.5em;
+}
+
+.residencelist li ul li
+{
+    display: inline-block;
+    height: 12px;
+}
+
+.residencename
+{
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.activitypanel em
+{
+    font-size: 2em;
+    font-style: normal;
+    font-weight: bold;
+    display: block;
+}
+
+.activitypanel
+{
+    padding: 8px;
 }

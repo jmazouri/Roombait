@@ -3,10 +3,39 @@
     ViewData["Title"] = Model.Name;
 }
 
-<h2>@ViewData["Title"]</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
-
+<h2 class="residencename">@ViewData["Title"]</h2>
 @foreach (ApplicationUser resident in Model.Residents)
 {
     <span class="label label-primary">@resident.Name</span>
+}
+<br/>
+@foreach (Activity activity in Model.Activites)
+{
+    <p class="bg-info activitypanel">
+        
+        <em>@activity.Name</em>
+        @foreach (var dayStatus in activity.PerformanceStatus())
+        {
+            string spanClass = "label-default";
+
+            switch (dayStatus.Value)
+            {
+                case ActivityState.Completed:
+                    spanClass = "label-success";
+                    break;
+                case ActivityState.NotScheduled:
+                    spanClass = "label-default";
+                    break;
+                case ActivityState.PastDue:
+                    spanClass = "label-danger";
+                    break;
+                case ActivityState.Upcoming:
+                    spanClass = "label-primary";
+                    break;
+            }
+            <span title="@(dayStatus.Value.ToString())" class="label @(spanClass)">@dayStatus.Key.ToString()</span>
+        }
+
+    </p>
 }
