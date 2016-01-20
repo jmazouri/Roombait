@@ -53,6 +53,17 @@ namespace Roombait.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult Delete(int activityId)
+        {
+            _context.Activities.Remove(_context.Activities.First(d => d.ActivityID == activityId));
+            _context.SaveChanges();
+            
+            return new HttpOkResult();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Activity activity)
         {
             if (!ModelState.IsValid)

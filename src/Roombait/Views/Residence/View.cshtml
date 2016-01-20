@@ -54,9 +54,15 @@
         </h3>
     }
     @foreach (Activity activity in Model.Activites)
-            {
+    {
         <a href="/Activity/@activity.ActivityID/@Util.GetSlug(activity.Name)" class="list-group-item">
+
+            <div class="pull-right">
+                <button data-activity="@activity.ActivityID" type="button" class="btn btn-danger deleteactivity">Delete</button>
+            </div>
+
             <h4 class="list-group-item-heading">@activity.Name</h4>
+
             <p class="list-group-item-text">
                 @foreach (var dayStatus in activity.PerformanceStatus())
                 {

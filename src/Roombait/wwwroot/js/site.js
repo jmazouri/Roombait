@@ -1,5 +1,18 @@
 ﻿// Write your Javascript code.
-$(document).ready(function() {
+$(document).ready(function()
+{
+    $(".deleteactivity").on("click", function()
+    {
+        var antiForgery = $("[name='__RequestVerificationToken']").attr("value");
+
+        $.post("/Activity/Delete", { activityId: $(this).attr("data-activity"), __RequestVerificationToken: antiForgery })
+            .done(function(data)
+            {
+                location.reload();
+            });
+
+        event.preventDefault();
+    });
 
     $(".residencecreate").on("click", function ()
     {
