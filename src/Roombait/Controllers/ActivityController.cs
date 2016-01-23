@@ -38,6 +38,7 @@ namespace Roombait.Controllers
         {
             var result = await _context.Activities
                 .Include(d => d.Performances)
+                .ThenInclude(d=>d.User)
                 .SingleOrDefaultAsync(d => d.ActivityID == id);
 
             var ret = result.Performances.Select(d => new

@@ -47,17 +47,18 @@ $(document).ready(function()
         });
 
         $.post("/Activity/Create",
-            {
-                name: activityName,
-                __RequestVerificationToken: antiForgery,
-                AssociatedResidence: residenceId,
-                DaysPerformedList: values
-            })
-            .done(function (data)
-            {
-                location.reload();
-            });
+        {
+            name: activityName,
+            __RequestVerificationToken: antiForgery,
+            AssociatedResidence: residenceId,
+            DaysPerformedList: values
+        })
+        .done(function (data)
+        {
+            location.reload();
+        });
     });
+
 });
 
 $('.submitbtn').on('click', function ()
