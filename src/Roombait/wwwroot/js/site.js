@@ -3,16 +3,33 @@ $(document).ready(function()
 {
     $(".deleteactivity").on("click", function()
     {
-        var antiForgery = $("[name='__RequestVerificationToken']").attr("value");
+        toastr.options.closeButton = true;
+        toastr.options.preventDuplicates = true;
 
-        $.post("/Activity/Delete", { activityId: $(this).attr("data-activity"), __RequestVerificationToken: antiForgery })
-            .done(function(data)
+        toastr.warning("<button id='confirmdelete' class='btn btn-danger' data-activity='" + $(this).attr("data-activity") + "'>Yes, delete it</button>",
+            "Are you sure you want to delete this action?");
+
+        event.preventDefault();
+    });
+
+    $(document).on("click", "#confirmdelete", function () {
+        var antiForgery = $("[name='__RequestVerificationToken']").attr("value");
+        var activityId = $(this).attr("data-activity");
+
+        $.post("/Activity/Delete", { activityId: activityId, __RequestVerificationToken: antiForgery })
+            .done(function (data)
             {
-                location.reload();
+                $(".activitybox[data-activity='" + activityId + "']").fadeOut();
+            })
+            .fail(function (data)
+            {
+                toastr.error('Could not delete activity: you are not the owner of the residence.');
             });
 
         event.preventDefault();
     });
+
+    $('#chosenDays').multiselect();
 
     $(".residencecreate").on("click", function ()
     {
@@ -42,7 +59,7 @@ $(document).ready(function()
         var antiForgery = $("[name='__RequestVerificationToken']").attr("value");
 
         var values = new Array();
-        $.each($("input[name='chosenDays[]']:checked"), function () {
+        $.each($("option[name='chosenDays[]']:selected"), function () {
             values.push($(this).val());
         });
 
@@ -66,7 +83,7 @@ $('.submitbtn').on('click', function ()
     location.reload();
 });
 
-$('.btn-group').on('hide.bs.dropdown', function (e)
+$('.keepopen').on('hide.bs.dropdown', function (e)
 {
     return false;
 });

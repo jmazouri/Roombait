@@ -17,14 +17,12 @@
             <input class="form-control" id="NewActivityName" name="NewActivityName" type="text" placeholder="Activity Name"/>
         </li>
         <li>
-            <div class="btn-group btn-group-xs" data-toggle="buttons">
+            <select id="chosenDays" name="chosenDays[]" multiple>
                 @foreach (string dayofweek in Enum.GetNames(typeof(DayOfWeek)))
                 {
-                    <label class="btn btn-info">
-                        <input type="checkbox" name="chosenDays[]" autocomplete="off" value="@dayofweek"> @dayofweek
-                    </label>
+                    <option value="@dayofweek">@dayofweek</option>
                 }
-            </div>
+            </select>
         </li>
         <li>
             <button class="btn btn-default submitbtn activitycreate" type="button">Create</button>
@@ -55,7 +53,7 @@
     }
     @foreach (Activity activity in Model.Activites)
     {
-        <a href="/Activity/@activity.ActivityID/@Util.GetSlug(activity.Name)" class="list-group-item">
+        <a href="/Activity/@activity.ActivityID/@Util.GetSlug(activity.Name)" class="list-group-item activitybox" data-activity="@activity.ActivityID">
 
             <div class="pull-right">
                 <button data-activity="@activity.ActivityID" type="button" class="btn btn-success performactivity">Perform</button>
@@ -92,10 +90,14 @@
     }
 </div>
 
-
+@section styles
+{
+    <link href="~/lib/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet" />
+}
 
 @section scripts
 {
+    <script src="~/lib/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
     <script>
         var residenceId = @Model.ResidenceID;
     </script>

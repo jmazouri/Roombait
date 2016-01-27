@@ -6,6 +6,8 @@
     "jquery": "2.1.4",
     "jquery-validation": "1.14.0",
     "jquery-validation-unobtrusive": "3.2.4",
-    "fullcalendar": "2.4.0"
+    "fullcalendar": "2.4.0",
+    "toastr": "2.1.2",
+    "bootstrap-multiselect": "~0.9.13"
   }
 }

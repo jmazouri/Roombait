@@ -56,9 +56,25 @@ namespace Roombait.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int activityId)
         {
-            _context.Activities.Remove(_context.Activities.First(d => d.ActivityID == activityId));
+            var foundActivity = _context.Activities
+                .Include(d=>d.Performances)
+                .Include(d=>d.AssociatedResidence)
+                    .ThenInclude(d=>d.Owner)
+                .First(d => d.ActivityID == activityId);
+
+            if (User.GetUserId() != foundActivity.AssociatedResidence.Owner.Id)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            _context.Performances.RemoveRange(foundActivity.Performances);
+
             _context.SaveChanges();
-            
+
+            _context.Activities.Remove(foundActivity);
+
+            _context.SaveChanges();
+
             return new HttpOkResult();
         }
 
