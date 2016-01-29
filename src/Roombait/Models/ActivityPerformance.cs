@@ -15,7 +15,7 @@ namespace Roombait.Models
         public DateTime WhenPerformed { get; set; }
         public string Memo { get; set; }
 
-        public bool IsInWeek(DateTime start, DateTime end)
+        public bool IsBetweenDates(DateTime start, DateTime end)
         {
             return WhenPerformed >= start && WhenPerformed <= end;
         }

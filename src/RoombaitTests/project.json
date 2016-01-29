@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0-*",
+  "description": "RoombaitTests Class Library",
+  "authors": [ "jmazo_000" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "dnx451": { }
+  },
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
+  "dependencies": {
+    "Roombait": "1.0.0-*",
+    "xunit": "2.1.0-rc2-build3176",
+    "xunit.runner.dnx": "2.1.0-*"
+  }
+}

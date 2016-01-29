@@ -25,14 +25,16 @@ namespace Roombait.Models
         public List<ActivityPerformance> Performances { get; set; } 
 
         //CSV
-        private string DaysPerformed { get; set; }
+        public string DaysPerformed { get; set; }
 
         [NotMapped]
         public List<DayOfWeek> DaysPerformedList
         {
             get
             {
-                return DaysPerformed.Split(',')
+                var splitDays = DaysPerformed.Split(',');
+
+                return splitDays
                     .Select(d=>Enum.Parse(typeof(DayOfWeek), d))
                     .Cast<DayOfWeek>()
                     .OrderBy(d=>d)
@@ -47,19 +49,25 @@ namespace Roombait.Models
             Performances = new List<ActivityPerformance>();
         }
 
-        public Dictionary<DayOfWeek, ActivityState> PerformanceStatus()
+        [Obsolete("Don't use this constructor unless you have to")]
+        public Activity(string daysPerformedCsv) : this()
         {
+            DaysPerformed = daysPerformedCsv;
+        }
+
+        public Dictionary<DayOfWeek, ActivityState> PerformanceStatus(DateTime relativeTo)
+        { 
             Dictionary<DayOfWeek, ActivityState> ret = new Dictionary<DayOfWeek, ActivityState>();
 
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
                 ActivityState state = ActivityState.NotScheduled;
 
-                var performancesThisWeek = Performances.Where(d => d.IsInWeek(Util.StartOfWeek(DateTime.Now), Util.EndOfWeek(DateTime.Now)));
+                var performancesThisWeek = Performances.Where(d => d.IsBetweenDates(Util.StartOfWeek(relativeTo), Util.EndOfWeek(relativeTo)));
 
                 if (DaysPerformedList.Contains(day))
                 {
-                    state = day < DateTime.Now.DayOfWeek ? ActivityState.PastDue : ActivityState.Upcoming;
+                    state = day < relativeTo.DayOfWeek ? ActivityState.PastDue : ActivityState.Upcoming;
                 }
 
                 if (performancesThisWeek.Any(d => d.WhenPerformed.DayOfWeek == day))

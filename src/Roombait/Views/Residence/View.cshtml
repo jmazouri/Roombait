@@ -6,30 +6,41 @@
     ViewData["Title"] = Model.Name;
 }
 
-<br />
+<br/>
 
-<div class="btn-group keepopen pull-right">
-    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        New Activity<span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu newactivity">
-        <li>
-            <input class="form-control" id="NewActivityName" name="NewActivityName" type="text" placeholder="Activity Name"/>
-        </li>
-        <li>
-            <select id="chosenDays" name="chosenDays[]" multiple>
-                @foreach (string dayofweek in Enum.GetNames(typeof(DayOfWeek)))
-                {
-                    <option value="@dayofweek">@dayofweek</option>
-                }
-            </select>
-        </li>
-        <li>
-            <button class="btn btn-default submitbtn activitycreate" type="button">Create</button>
-            <button class="btn btn-danger submitbtn" type="button">Cancel</button>
-        </li>
-    </ul>
-</div>
+<div class="modal fade" id="newresidencemodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">New Activity</h4>
+            </div>
+
+            <div class="modal-body">
+                <input class="form-control" id="NewActivityName" name="NewActivityName" type="text" placeholder="Activity Name"/>
+                <br />
+                <div class="form-group">
+                    <label for="chosenDays">Days to Perform</label>
+                    <br />
+                    <select id="chosenDays" name="chosenDays[]" multiple>
+                        @foreach (string dayofweek in Enum.GetNames(typeof (DayOfWeek)))
+                        {
+                            <option value="@dayofweek">@dayofweek</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success submitbtn activitycreate" type="button">Create</button>
+                <button class="btn btn-danger submitbtn" data-dismiss="modal" type="button">Cancel</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<button type="button" id="newactivitybutton" data-toggle="modal" data-target="#newresidencemodal" class="btn btn-success pull-right">
+    New Activity
+</button>
 
 <p class="text-success">@ViewData["StatusMessage"]</p>
 <h2 class="residencename">@ViewData["Title"] Activities</h2>
@@ -63,7 +74,7 @@
             <h4 class="list-group-item-heading">@activity.Name</h4>
 
             <p class="list-group-item-text">
-                @foreach (var dayStatus in activity.PerformanceStatus())
+                @foreach (var dayStatus in activity.PerformanceStatus(DateTime.Now))
                 {
                     string spanClass = "label-default";
 
