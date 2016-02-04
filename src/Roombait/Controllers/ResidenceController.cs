@@ -33,7 +33,7 @@ namespace Roombait.Controllers
             else
             {
                 result = _context.Residences
-                        .Where(residence => residence.Residents.Any(user => user.Id == HttpContext.User.GetUserId()))
+                        .Where(residence => residence.Residents.Any(user => user.Id == User.GetUserId()))
                         .Include(d => d.Residents)
                         .ToList();
             }

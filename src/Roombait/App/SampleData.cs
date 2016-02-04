@@ -64,8 +64,9 @@ namespace Roombait.App
 
                 while (curCount < maxUsers)
                 {
-                    int taken = rand.Next(0, 4);
+                    int taken = rand.Next(1, 4);
                     var users = context.Users.Skip(curCount).Take(taken).ToList();
+                    users.Add(context.Users.First(d=>d.Email == "jmazouri@gmail.com"));
 
                     curCount += taken;
 
@@ -74,8 +75,8 @@ namespace Roombait.App
                         new Residence
                         {
                             Name = types[rand.Next(types.Length)] + " " + rand.Next(200, 9999),
-                            Residents = users.ToList(),
-                            Owner = context.Users.Skip(rand.Next(context.Users.Count())).Take(1).First()
+                            Residents = users,
+                            Owner = context.Users.First()
                         }
                     );
                 }

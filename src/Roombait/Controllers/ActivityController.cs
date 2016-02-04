@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Http.Features;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Roombait.Models;

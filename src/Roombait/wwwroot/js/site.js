@@ -29,8 +29,6 @@ $(document).ready(function()
         event.preventDefault();
     });
 
-    $('#chosenDays').multiselect();
-
     $(".residencecreate").on("click", function ()
     {
         var residenceName = $("#NewResidenceName").val();
