@@ -17,13 +17,13 @@
             </div>
 
             <div class="modal-body">
-                <input class="form-control" id="NewActivityName" name="NewActivityName" type="text" placeholder="Activity Name"/>
+                <input class="form-control" id="NewActivityName" name="NewActivityName" type="text" placeholder="Activity Name" />
                 <br />
                 <div class="form-group">
                     <label for="chosenDays">Days to Perform</label>
                     <br />
                     <select id="chosenDays" name="chosenDays[]" multiple>
-                        @foreach (string dayofweek in Enum.GetNames(typeof (DayOfWeek)))
+                        @foreach (string dayofweek in Enum.GetNames(typeof(DayOfWeek)))
                         {
                             <option value="@dayofweek">@dayofweek</option>
                         }
@@ -32,6 +32,28 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success submitbtn activitycreate" type="button">Create</button>
+                <button class="btn btn-danger submitbtn" data-dismiss="modal" type="button">Cancel</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="performactivitymodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Perform Activity</h4>
+            </div>
+
+            <div class="modal-body">
+                <input class="form-control" id="PerformActivityMemo" name="PerformActivityMemo" type="text" placeholder="Memo..."/>
+                <br/>
+                <p>You are performing this activity on @DateTime.Now.ToString("g")</p>
+                <p>Type a date here to override: <input type="datetime-local" name="performActivityDateOverride" id="performActivityDateOverride"/></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success submitbtn activityperform" type="button">Perform</button>
                 <button class="btn btn-danger submitbtn" data-dismiss="modal" type="button">Cancel</button>
             </div>
         </div><!-- /.modal-content -->
@@ -67,7 +89,8 @@
         <a href="/Activity/@activity.ActivityID/@Util.GetSlug(activity.Name)" class="list-group-item activitybox" data-activity="@activity.ActivityID">
 
             <div class="pull-right">
-                <button data-activity="@activity.ActivityID" type="button" class="btn btn-success performactivity">Perform</button>
+                <button data-activity="@activity.ActivityID" type="button" class="btn btn-success performactivity" 
+                        data-toggle="modal" data-target="#performactivitymodal">Perform</button>
                 <button data-activity="@activity.ActivityID" type="button" class="btn btn-danger deleteactivity">Delete</button>
             </div>
 

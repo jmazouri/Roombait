@@ -1,6 +1,7 @@
-﻿// Write your Javascript code.
-$(document).ready(function()
+﻿$(document).ready(function()
 {
+    var newPerformanceId = "";
+
     $(".deleteactivity").on("click", function()
     {
         toastr.options.closeButton = true;
@@ -8,6 +9,31 @@ $(document).ready(function()
 
         toastr.warning("<button id='confirmdelete' class='btn btn-danger' data-activity='" + $(this).attr("data-activity") + "'>Yes, delete it</button>",
             "Are you sure you want to delete this action?");
+
+        event.preventDefault();
+    });
+
+    $(document).on("click", ".performactivity", function ()
+    {
+        var activityId = $(this).attr("data-activity");
+        newPerformanceId = activityId;
+
+        event.preventDefault();
+    });
+
+    $(document).on("click", ".activityperform", function ()
+    {
+        var antiForgery = $("[name='__RequestVerificationToken']").attr("value");
+
+        $.post("/Activity/Perform", { activityId: newPerformanceId, memo: $("#PerformActivityMemo").val(), dateOverride: $("#performActivityDateOverride").val(), __RequestVerificationToken: antiForgery })
+            .done(function (data)
+            {
+                toastr.success("Successfully performed activity.");
+            })
+            .fail(function (data)
+            {
+                toastr.error('There was an error in performing the activity.');
+            });
 
         event.preventDefault();
     });
@@ -57,7 +83,7 @@ $(document).ready(function()
         var antiForgery = $("[name='__RequestVerificationToken']").attr("value");
 
         var values = new Array();
-        $.each($("option[name='chosenDays[]']:selected"), function () {
+        $.each($("select[name='chosenDays[]'] > option:selected"), function () {
             values.push($(this).val());
         });
 

@@ -35,6 +35,43 @@ namespace Roombait.Controllers
         }
 
         [Authorize]
+        public IActionResult Perform(int activityId, string memo = "", string dateOverride = "")
+        {
+            var foundActivity = _context.Activities
+                .Include(d => d.Performances)
+                .Include(d => d.AssociatedResidence)
+                    .ThenInclude(d=>d.Residents)
+                .First(d => d.ActivityID == activityId);
+
+            if (foundActivity == null) { return HttpNotFound(); }
+            if (foundActivity.AssociatedResidence.Residents.All(d => d.Id != User.GetUserId())) { return HttpUnauthorized(); }
+
+            var currentUser = _context.Users.First(d => d.Id == User.GetUserId());
+
+            DateTime performanceDate = DateTime.Now;
+
+            if (!DateTime.TryParse(dateOverride, out performanceDate))
+            {
+                performanceDate = DateTime.Now;
+            }
+            else
+            {
+                memo = memo + " - Added on " + DateTime.Now.ToString("g");
+            }
+
+            foundActivity.Performances.Add(new ActivityPerformance
+            {
+                User = currentUser,
+                WhenPerformed = performanceDate,
+                Memo = memo
+            });
+
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [Authorize]
         public async Task<IActionResult> Data(int id)
         {
             var result = await _context.Activities
@@ -76,7 +113,7 @@ namespace Roombait.Controllers
 
             _context.SaveChanges();
 
-            return new HttpOkResult();
+            return Ok();
         }
 
         [Authorize]

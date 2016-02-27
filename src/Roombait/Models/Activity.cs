@@ -32,7 +32,7 @@ namespace Roombait.Models
         {
             get
             {
-                var splitDays = DaysPerformed.Split(',');
+                var splitDays = DaysPerformed.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
                 return splitDays
                     .Select(d=>Enum.Parse(typeof(DayOfWeek), d))
